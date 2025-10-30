@@ -1,5 +1,8 @@
 ## 🗳️ Decentralized Voting Smart Contract (`DecentralizedVoting.sol`)
 
+<img width="1366" height="720" alt="Screenshot 2025-10-30 135937" src="https://github.com/user-attachments/assets/aca0c80b-ba12-4231-843a-c5f6a858b871" />
+
+
 This Solidity smart contract implements a basic decentralized voting system with a clear voter registration process. It enforces that only explicitly registered addresses can participate in the voting process, ensuring control over who can cast a vote.
 
 ***
