@@ -1,1 +1,111 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract DecentralizedVoting {
+    // --- State Variables ---
+
+    // Struct to hold information about a single proposal
+    struct Proposal {
+        string name;
+        uint256 voteCount;
+    }
+
+    // Array to store all the proposals
+    Proposal[] public proposals;
+
+    // Mapping to track which addresses are registered voters
+    mapping(address => bool) public isRegisteredVoter;
+
+    // Mapping to track which addresses have already voted.
+    mapping(address => bool) public hasVoted;
+
+    // The address that deployed the contract (the administrator/registrar)
+    address public chairperson;
+
+    // --- Events ---
+    event VoterRegistered(address voterAddress);
+    event VoteCasted(address voter, uint256 proposalIndex);
+    event ProposalsCreated(uint256 count);
+
+    // --- Modifiers ---
+
+    // Restricts access to the chairperson (contract deployer).
+    modifier onlyChairperson() {
+        require(msg.sender == chairperson, "Only the chairperson can perform this action.");
+        _;
+    }
+
+    // Restricts access to only registered voters.
+    modifier onlyVoter() {
+        require(isRegisteredVoter[msg.sender] == true, "You must be a registered voter.");
+        _;
+    }
+
+    // --- Constructor ---
+
+    // Takes initial proposal names and sets the deployer as the chairperson.
+    constructor(string[] memory proposalNames) {
+        chairperson = msg.sender; 
+
+        for (uint i = 0; i < proposalNames.length; i++) {
+            proposals.push(Proposal({
+                name: proposalNames[i],
+                voteCount: 0
+            }));
+        }
+        emit ProposalsCreated(proposals.length);
+    }
+
+    // --- Functions ---
+
+    /**
+     * @notice Allows the chairperson to register a new voter.
+     * @param voterAddress The address to register.
+     */
+    function registerVoter(address voterAddress) public onlyChairperson {
+        require(isRegisteredVoter[voterAddress] == false, "Voter is already registered.");
+        
+        isRegisteredVoter[voterAddress] = true;
+        emit VoterRegistered(voterAddress);
+    }
+
+    /**
+     * @notice Allows a registered voter to cast their vote for a proposal.
+     * @param proposalIndex The index of the proposal in the 'proposals' array.
+     */
+    function vote(uint256 proposalIndex) public onlyVoter {
+        // 1. Check if the user has already voted.
+        require(hasVoted[msg.sender] == false, "You have already voted.");
+
+        // 2. Check if the proposal index is valid.
+        require(proposalIndex < proposals.length, "Invalid proposal index.");
+
+        // 3. Record that the user has voted.
+        hasVoted[msg.sender] = true;
+
+        // 4. Increment the vote count for the chosen proposal.
+        proposals[proposalIndex].voteCount++;
+
+        // Emit an event to log the vote.
+        emit VoteCasted(msg.sender, proposalIndex);
+    }
+
+    /**
+     * @notice Returns the proposal with the highest number of votes.
+     * @return name The name of the winning proposal.
+     * @return voteCount The total votes for the winning proposal.
+     */
+    function winningProposal() public view returns (string memory name, uint256 voteCount) {
+        uint256 winningIndex = 0;
+        uint256 highestVotes = 0;
+
+        for (uint i = 0; i < proposals.length; i++) {
+            if (proposals[i].voteCount > highestVotes) {
+                highestVotes = proposals[i].voteCount;
+                winningIndex = i;
+            }
+        }
+        return (proposals[winningIndex].name, proposals[winningIndex].voteCount);
+    }
+}
 
