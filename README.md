@@ -1,4 +1,4 @@
-## 🗳️ Decentralized Voting Smart Contract (`DecentralizedVoting.sol`)
+# 🗳️ Decentralized Voting Smart Contract (`DecentralizedVoting.sol`)
 
 <img width="1366" height="720" alt="Screenshot 2025-10-30 135937" src="https://github.com/user-attachments/assets/aca0c80b-ba12-4231-843a-c5f6a858b871" />
 
@@ -8,7 +8,7 @@ This Solidity smart contract implements a basic decentralized voting system with
 
 ***
 
-## 🚀 Key Features
+# 🚀 Key Features
 
 * **Controlled Voter Registration**: Only the contract deployer (the `chairperson`) can register new addresses as eligible voters.
 * **One Person, One Vote**: Registered voters can cast a vote only once.
