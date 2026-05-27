@@ -15,7 +15,7 @@ This Solidity smart contract implements a basic decentralized voting system with
 * **Pre-Defined Proposals**: The voting options are set permanently upon contract deployment.
 * **Winning Proposal Calculation**: A public function allows anyone to check the current leading proposal.
 
-***
+**
 
 ## ⚙️ Contract Architecture
 
